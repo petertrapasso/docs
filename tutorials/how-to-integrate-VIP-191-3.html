@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>How to Integrate VIP-191 (III) | VeChain Docs</title>
+    <meta name="description" content="This is the last part of the tutorial. It mainly explains the sponsor’s initiative to inspect the transaction and sign his signature on it. We will use the express.js library to build a framework to receive transmission and return the result.">
+    <meta name="generator" content="VuePress 1.4.0">
+    <link rel="icon" href="/logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#3eaf7c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+  <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+  <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#000000">
+  <meta name="keywords" content="vechain, documentation, docs, thor, connex, sync, official">
+    
+    <link rel="preload" href="/assets/css/0.styles.727e7545.css" as="style"><link rel="preload" href="/assets/js/app.3da92b4b.js" as="script"><link rel="preload" href="/assets/js/3.b4a9e1a9.js" as="script"><link rel="preload" href="/assets/js/46.3e43704f.js" as="script"><link rel="preload" href="/assets/js/8.77fe2b1e.js" as="script"><link rel="prefetch" href="/assets/js/10.ea619ca3.js"><link rel="prefetch" href="/assets/js/11.2e96fa7e.js"><link rel="prefetch" href="/assets/js/12.63026fb4.js"><link rel="prefetch" href="/assets/js/13.a8ed1307.js"><link rel="prefetch" href="/assets/js/14.43cae04d.js"><link rel="prefetch" href="/assets/js/15.2166d056.js"><link rel="prefetch" href="/assets/js/16.a05bb904.js"><link rel="prefetch" href="/assets/js/17.9da18bbc.js"><link rel="prefetch" href="/assets/js/18.db5b11a0.js"><link rel="prefetch" href="/assets/js/19.7b53fe4a.js"><link rel="prefetch" href="/assets/js/20.cf06f591.js"><link rel="prefetch" href="/assets/js/21.525fe7f9.js"><link rel="prefetch" href="/assets/js/22.6dff57a3.js"><link rel="prefetch" href="/assets/js/23.6bfb969d.js"><link rel="prefetch" href="/assets/js/24.44b7716f.js"><link rel="prefetch" href="/assets/js/25.c8c583d5.js"><link rel="prefetch" href="/assets/js/26.c9d896a1.js"><link rel="prefetch" href="/assets/js/27.e27f4cb8.js"><link rel="prefetch" href="/assets/js/28.d75f35bc.js"><link rel="prefetch" href="/assets/js/29.5fd52193.js"><link rel="prefetch" href="/assets/js/30.42427fe8.js"><link rel="prefetch" href="/assets/js/31.030b20b3.js"><link rel="prefetch" href="/assets/js/32.c6982e54.js"><link rel="prefetch" href="/assets/js/33.c1ce93b2.js"><link rel="prefetch" href="/assets/js/34.63d5aaad.js"><link rel="prefetch" href="/assets/js/35.95dcba5e.js"><link rel="prefetch" href="/assets/js/36.54b1fe82.js"><link rel="prefetch" href="/assets/js/37.bbf14b99.js"><link rel="prefetch" href="/assets/js/38.7d53e192.js"><link rel="prefetch" href="/assets/js/39.1dfab5b6.js"><link rel="prefetch" href="/assets/js/4.9fbef010.js"><link rel="prefetch" href="/assets/js/40.ffcf8941.js"><link rel="prefetch" href="/assets/js/41.5a2a7a2a.js"><link rel="prefetch" href="/assets/js/42.ba529dcf.js"><link rel="prefetch" href="/assets/js/43.b32cbe1f.js"><link rel="prefetch" href="/assets/js/44.8bd65a8b.js"><link rel="prefetch" href="/assets/js/45.4f15ee9d.js"><link rel="prefetch" href="/assets/js/47.d5b1169f.js"><link rel="prefetch" href="/assets/js/48.19c560d9.js"><link rel="prefetch" href="/assets/js/5.5d2a96e6.js"><link rel="prefetch" href="/assets/js/6.0779f2ad.js"><link rel="prefetch" href="/assets/js/7.d14b27ba.js"><link rel="prefetch" href="/assets/js/9.885e62d8.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.f7385de5.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.727e7545.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.png" alt="VeChain Docs" class="logo"> <span class="site-name can-hide">VeChain Docs</span></a> <div class="links"><form id="search-form" role="search" class="algolia-search-wrapper search-box"><input id="algolia-search-input" class="search-query"></form> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Thor" class="dropdown-title"><span class="title">Thor</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/thor/learn/" class="nav-link">
+  Learn
+</a></li><li class="dropdown-item"><!----> <a href="/thor/get-started/installation.html" class="nav-link">
+  Get Started
+</a></li><li class="dropdown-item"><!----> <a href="/thor/get-started/api.html" class="nav-link">
+  Thorest API
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Connex" class="dropdown-title"><span class="title">Connex</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/connex/index.html" class="nav-link">
+  Get Started
+</a></li><li class="dropdown-item"><!----> <a href="/connex/api.html" class="nav-link">
+  Connex API
+</a></li><li class="dropdown-item"><!----> <a href="/connex/implementation.html" class="nav-link">
+  Implementation
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Sync" class="dropdown-title"><span class="title">Sync</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/sync/download-and-install.html" class="nav-link">
+  Download
+</a></li><li class="dropdown-item"><!----> <a href="/sync/user-guide/" class="nav-link">
+  User Guide
+</a></li><li class="dropdown-item"><!----> <a href="/sync/faq.html" class="nav-link">
+  FAQ
+</a></li></ul></div></div><div class="nav-item"><a href="/tutorials/" class="nav-link router-link-active">
+  Tutorials
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Resources" class="dropdown-title"><span class="title">Resources</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://explore.vechain.org" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Explorer
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://apps.vechain.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  App-hub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="/others/miscellaneous.html" class="nav-link">
+  Miscellaneous
+</a></li><li class="dropdown-item"><!----> <a href="/others/demos-and-services.html" class="nav-link">
+  Demos &amp; Services
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Online Support" class="dropdown-title"><span class="title">Online Support</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://t.me/vechain_official_english" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  VeChain Official
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://t.me/VeChainDevCommunity" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Dev Community
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <a href="https://github.com/vechain/docs" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Thor" class="dropdown-title"><span class="title">Thor</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/thor/learn/" class="nav-link">
+  Learn
+</a></li><li class="dropdown-item"><!----> <a href="/thor/get-started/installation.html" class="nav-link">
+  Get Started
+</a></li><li class="dropdown-item"><!----> <a href="/thor/get-started/api.html" class="nav-link">
+  Thorest API
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Connex" class="dropdown-title"><span class="title">Connex</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/connex/index.html" class="nav-link">
+  Get Started
+</a></li><li class="dropdown-item"><!----> <a href="/connex/api.html" class="nav-link">
+  Connex API
+</a></li><li class="dropdown-item"><!----> <a href="/connex/implementation.html" class="nav-link">
+  Implementation
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Sync" class="dropdown-title"><span class="title">Sync</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/sync/download-and-install.html" class="nav-link">
+  Download
+</a></li><li class="dropdown-item"><!----> <a href="/sync/user-guide/" class="nav-link">
+  User Guide
+</a></li><li class="dropdown-item"><!----> <a href="/sync/faq.html" class="nav-link">
+  FAQ
+</a></li></ul></div></div><div class="nav-item"><a href="/tutorials/" class="nav-link router-link-active">
+  Tutorials
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Resources" class="dropdown-title"><span class="title">Resources</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://explore.vechain.org" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Explorer
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://apps.vechain.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  App-hub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="/others/miscellaneous.html" class="nav-link">
+  Miscellaneous
+</a></li><li class="dropdown-item"><!----> <a href="/others/demos-and-services.html" class="nav-link">
+  Demos &amp; Services
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Online Support" class="dropdown-title"><span class="title">Online Support</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://t.me/vechain_official_english" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  VeChain Official
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://t.me/VeChainDevCommunity" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Dev Community
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <a href="https://github.com/vechain/docs" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>How to Integrate VIP-191 (III)</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/tutorials/how-to-integrate-VIP-191-3.html#conclusion" class="sidebar-link">Conclusion</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="how-to-integrate-vip-191-iii"><a href="#how-to-integrate-vip-191-iii" class="header-anchor">#</a> How to Integrate VIP-191 (III)</h1> <p>This is the last part of the tutorial.</p> <p>It mainly explains the sponsor’s initiative to inspect the transaction and sign his signature on it. We will use the express.js library to build a framework to receive transmission and return the result.</p> <p>Before that, I have a <em><strong>hefty wallet</strong></em> on test-net to be a sponsor:</p> <blockquote><p>Sponsor’s address: 0x126cdb344f476f25b9fb2050513f425a82f71046</p> <p>Private key: 5df5e7f22a71dfd3d032ff5eb9dfc7dbe9c950e0671745826639a0423cd45d7f</p> <p>Balance: [<a href="https://explore-testnet.vechain.org/accounts/0x126cdb344f476f25b9fb2050513f425a82f71046" target="_blank" rel="noopener noreferrer">LINK<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>] ← Contains &gt;4000 VTHO to be spent.</p></blockquote> <h3 id="sponsor-s-server-code"><a href="#sponsor-s-server-code" class="header-anchor">#</a> Sponsor’s Server Code</h3> <div class="language- extra-class"><pre class="language-text"><code>
+const express = require('express')
+const cry = require('thor-devkit/dist/cry')
+const Transaction = require('thor-devkit/dist/transaction').Transaction
+
+const app = express()
+app.use(express.json())
+const port = 3000
+
+app.post('/', function(req, res) {
+
+    // Re-construct the transaction from the request.
+    const tx = new Transaction(req.body['txBody'])
+    // Extract 'sender' address from request.
+    const sender = req.body['sender']
+
+    // Compute the sponsor hash.
+    const sponsorHash = tx.signingHash(sender)
+
+    // Sponsor account (with money): 
+    // 0x126cdb344f476f25b9fb2050513f425a82f71046
+    const sponsorPriv = Buffer.from(
+        '5df5e7f22a71dfd3d032ff5eb9dfc7dbe9c950e0671745826639a0423cd45d7f',
+        'hex'
+    )
+
+    // Compute the sponsor signature with hash+private key.
+    const signature = cry.secp256k1.sign(sponsorHash, sponsorPriv)
+
+    // Send back the signature.
+    res.send({
+        'sponsor_signature': signature.toString('hex')
+    })
+
+})
+
+app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</code></pre></div><p>The above code is quite simple, with some details to pay attention to:</p> <ul><li><p>The server is listening on localhost:3000.</p></li> <li><p>The tx is re-constructed from the request, it’s a good time inspecting it.</p></li> <li><p>The sponsor is using his own private key to sign.</p></li> <li><p>The sponsor_signature is returned to the user.</p></li></ul> <h3 id="back-to-the-user-s-side"><a href="#back-to-the-user-s-side" class="header-anchor">#</a> Back to the User’s side</h3> <p>Finally, on the user’s side, it can assemble the final compound signature and post the transaction to the VeChain network!</p> <p>Let’s continue where we left off from the <a href="https://medium.com/@abyteahead/how-to-integrate-vip-191-ii-1b4e32d7960d" target="_blank" rel="noopener noreferrer">2nd tutorial<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>:</p> <div class="language- extra-class"><pre class="language-text"><code>// Fetch the sponsor signature.
+const sponsorSignature = await getSponosrSignature(
+    '0x'+originAddress.toString('hex'),
+    txBody
+)
+    
+// Compose a combined signature of user + sponsor.
+const sig = Buffer.concat([
+    originSignature,
+    Buffer.from(sponsorSignature, 'hex')
+])
+
+// Mount on the combined signature.
+tx.signature = sig
+
+// Convert the tx to raw format.
+const rawTx = '0x' + tx.encode().toString('hex')
+
+// Submit the raw transaction by hand to the test-net.
+const url = 'https://sync-testnet.vechain.org/transactions'
+fetch(url, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({'raw': rawTx})
+}).then(response =&gt; {
+    response.text().then(r =&gt; {console.log(r)})
+}).catch(err =&gt; {
+    console.log('err', err)
+})
+</code></pre></div><p>The process is quite straightforward, concatenate of user’s signature originSignature and the sponsor’s signature sponsorSignature . Then finally call the POST method to send to our VeChain test-net.</p> <h3 id="an-example-result"><a href="#an-example-result" class="header-anchor">#</a> An Example Result</h3> <p>As of writing, I have successfully posted several transactions and all show details of VIP-191 fee delegation feature, for example, the transaction with below ID:</p> <blockquote><p>Tx: 0xd8b94a68764f6f49eb33bb7a6e895e0f2565c8c8e1731f1258b188561b581e87 [<a href="https://explore-testnet.vechain.org/transactions/0xd8b94a68764f6f49eb33bb7a6e895e0f2565c8c8e1731f1258b188561b581e87#info" target="_blank" rel="noopener noreferrer">Web Link<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>]</p></blockquote> <p><img src="https://cdn-images-1.medium.com/max/3448/1*UzQOZILPS_Q7fC9whcbPXA.png" alt="Example of VIP-191 Result"><em>Example of VIP-191 Result</em></p> <p>As we can see from the above picture, the 26.64 VTHO is paid not by the user, but by the sponsor. Hence, the fee delegation is complete.</p> <h2 id="conclusion"><a href="#conclusion" class="header-anchor">#</a> Conclusion</h2> <p>Due to the length of the article, this VIP-191 tutorial doesn’t show the full source code from the user’s side and the sponsor’s side. I have included a workable sample of <a href="https://gist.github.com/laalaguer/1a7d9f9e0993c83ffcc84b766c3498ae" target="_blank" rel="noopener noreferrer">user.js<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> and <a href="https://gist.github.com/laalaguer/cbedc4591a13e5ef6b7e14eb1d1bcaf3" target="_blank" rel="noopener noreferrer">sponsor.js<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> on the Github for you to run.</p> <p>I hope you like this trilogy of tutorials on VIP-191 of VeChain. As always, may the force be with you!</p></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/vechain/docs/edit/master/tutorials/how-to-integrate-VIP-191-3.md" target="_blank" rel="noopener noreferrer">Edit this page</a> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></div> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">3/10/2020, 7:15:14 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/tutorials/how-to-integrate-VIP-191-2.html" class="prev">
+        How to Integrate VIP-191 (II)
+      </a></span> <!----></p></div> </main></div><div class="global-ui"><!----></div></div>
+    <script src="/assets/js/app.3da92b4b.js" defer></script><script src="/assets/js/3.b4a9e1a9.js" defer></script><script src="/assets/js/46.3e43704f.js" defer></script><script src="/assets/js/8.77fe2b1e.js" defer></script>
+  </body>
+</html>
